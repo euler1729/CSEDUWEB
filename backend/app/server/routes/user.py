@@ -2,6 +2,7 @@ from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
 
 from server.database import (
+    connect_to_mongo,
     add_user,
     delete_user,
     retrieve_user,

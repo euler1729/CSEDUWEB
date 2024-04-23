@@ -1,14 +1,16 @@
-import motor.motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
+from pymongo import MongoClient
 
-MONGO_DETAILS = "mongodb://localhost:27017"
-
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
-
-database = client.users
-
-users_collection = database.get_collection("users_collection")
-
+async def connect_to_mongo():
+    print("Connecting to MongoDB...")
+    MONGO_DETAILS = "mongodb://localhost:27017/"
+    client = MongoClient('mongodb://localhost:27017/')
+    db = client['userdb']
+    users_collection = db['users']
+    print("Connected to MongoDB!")
+    return users_collection
+users_collection = connect_to_mongo()
 
 # helpers
 def user_helper(user) -> dict:
