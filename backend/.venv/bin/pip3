@@ -1,4 +1,4 @@
-#!/home/mahmud/IPLAB/fastapi/venv/bin/python
+#!/home/mahmud/Labs/IPLAB/backend/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

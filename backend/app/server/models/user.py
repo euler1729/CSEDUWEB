@@ -3,32 +3,52 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserSchema(BaseModel):
     
-    name: str = Field(...)
+    first_name: str = Field(...)
+    last_name: str = Field(...)
     email: EmailStr = Field(...)
+    address: str = Field(...)
+    contact: str = Field(...)
+    city: str = Field(...)
+    state: str = Field(...)
     password: str = Field(...)
     role: str = Field(...)
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
-                "name": "John Doe",
-                "email": "jdoe@gmail.com",
+                "first_name": "Mahmudul",
+                "last_name": "Hasan",
+                "email": "mahmud@gmail.com",
+                "address": "Dhaka",
+                "contact": "017123456",
+                "city": "Dhaka",
+                "state": "Dhaka",
                 "password": "password",
                 "role": "admin"
             }
         }
 
 class UpdateUserModel(BaseModel):
-    name: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
     email: Optional[EmailStr]
+    address: Optional[str]
+    contact: Optional[str]
+    city: Optional[str]
+    state: Optional[str]
     password: Optional[str]
     role: Optional[str]
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
-                "name": "John Doe",
-                "email": "jdoe@gmail.com",
+                "first_name": "Mahmudul",
+                "last_name": "Hasan",
+                "email": "mahmud@gmail.com",
+                "address": "Dhaka",
+                "contact": "017123456",
+                "city": "Dhaka",
+                "state": "Dhaka",
                 "password": "password",
                 "role": "admin"
             }
