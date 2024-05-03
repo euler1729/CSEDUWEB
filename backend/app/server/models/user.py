@@ -18,7 +18,7 @@ class UserSchema(BaseModel):
             "example": {
                 "first_name": "Mahmudul",
                 "last_name": "Hasan",
-                "email": "mahmud@gmail.com",
+                "email": "test@gmail.com",
                 "address": "Dhaka",
                 "contact": "017123456",
                 "city": "Dhaka",
@@ -44,7 +44,7 @@ class UpdateUserModel(BaseModel):
             "example": {
                 "first_name": "Mahmudul",
                 "last_name": "Hasan",
-                "email": "mahmud@gmail.com",
+                "email": "test@gmail.com",
                 "address": "Dhaka",
                 "contact": "017123456",
                 "city": "Dhaka",

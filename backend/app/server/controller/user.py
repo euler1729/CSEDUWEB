@@ -4,6 +4,9 @@ from server.database import (
 from server.utils import (
     hash_password
 )
+from server.controller.auth import (
+    verify_token
+)
 from bson import ObjectId
 
 users_collection = db["users"]

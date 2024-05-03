@@ -17,7 +17,3 @@ app.add_middleware(
     allow_methods=["POST", "GET", "OPTIONS", "DELETE"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-async def read_root():
-    return {"Health Checked": "Ok"}

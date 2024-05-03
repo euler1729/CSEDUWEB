@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Request, Response
 from fastapi.encoders import jsonable_encoder
 
 from server.controller.user import (
@@ -13,16 +13,23 @@ from server.models.user import (
     ErrorResponseModel,
 )
 
+from server.middlewares.auth import (
+    check_token
+)
+
 router = APIRouter()
 
+
 @router.post("/add", response_description="User data added into the database")
+@check_token
 async def add_user_data(user: UserSchema = Body(...)):
     user = jsonable_encoder(user)
     new_user = await add_user(user)
     return ResponseModel(new_user, "User added successfully.")
 
 @router.get("/all", response_description="Users retrieved")
-async def get_users():
+@check_token
+async def get_users(request: Request, response: Response):
     users = await retrieve_users()
     if users:
         return ResponseModel(users, "Users data retrieved successfully")

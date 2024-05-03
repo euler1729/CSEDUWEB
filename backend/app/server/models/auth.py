@@ -30,7 +30,7 @@ class UserLogin(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "email": "abc@gmail.com",
+                "email": "test@gmail.com",
                 "password": "password"
             }
         }
