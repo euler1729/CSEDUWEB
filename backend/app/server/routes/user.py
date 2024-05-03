@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Request, Response
+from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 
 from server.controller.user import (
@@ -30,6 +30,10 @@ async def add_user_data(user: UserSchema = Body(...)):
 @router.get("/all", response_description="Users retrieved")
 @check_token
 async def get_users(request: Request, response: Response):
+    user = request.state.user
+    if(user['role'] != 'admin'):
+        response.status_code = 401
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
     users = await retrieve_users()
     if users:
         return ResponseModel(users, "Users data retrieved successfully")
@@ -37,8 +41,11 @@ async def get_users(request: Request, response: Response):
 
 @router.get("/{user_id}")
 @check_token
-async def get_user(user_id: str):
-    print("User ID is ", user_id)
+async def get_user(request: Request, response: Response, user_id: str):
+    if user_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
+
     user = await retrieve_user(user_id)
     if user:
         return ResponseModel(user, "User data retrieved successfully")
@@ -46,7 +53,10 @@ async def get_user(user_id: str):
 
 @router.put("/update/{user_id}")
 @check_token
-async def update_user_data(user_id: str, user: UserSchema = Body(...)):
+async def update_user_data(request: Request, response: Response, user_id: str, user: UserSchema = Body(...)):
+    if user_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
     user = {k: v for k, v in user.dict().items() if v is not None}
     updated_user = await update_user(user_id, user)
     if updated_user:

@@ -8,6 +8,7 @@ from server.controller.auth import (
     verify_token
 )
 from bson import ObjectId
+from fastapi import Request, Response, status
 
 users_collection = db["users"]
 
@@ -37,9 +38,7 @@ async def add_user(user_data: dict):
     
 # Retrieve all users present in the database
 async def retrieve_users():
-    print("Hello I am Here")
     users = users_collection.find()
-    print(users)
     user_list = []
     for user in users:
         user_list.append(user_helper(user))
