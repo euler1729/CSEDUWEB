@@ -36,6 +36,7 @@ async def get_users(request: Request, response: Response):
     return ResponseModel(users, "Empty list returned")
 
 @router.get("/{user_id}")
+@check_token
 async def get_user(user_id: str):
     print("User ID is ", user_id)
     user = await retrieve_user(user_id)
@@ -44,6 +45,7 @@ async def get_user(user_id: str):
     return ResponseModel(user, "User not found")
 
 @router.put("/update/{user_id}")
+@check_token
 async def update_user_data(user_id: str, user: UserSchema = Body(...)):
     user = {k: v for k, v in user.dict().items() if v is not None}
     updated_user = await update_user(user_id, user)
