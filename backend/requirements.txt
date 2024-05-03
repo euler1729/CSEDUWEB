@@ -3,3 +3,6 @@ uvicorn
 motor
 pydantic
 pydantic[email]
+jwt
+passlib[bcrypt]
+python-jose[cryptography]

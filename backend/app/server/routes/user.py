@@ -9,7 +9,8 @@ from server.controller.user import (
 )
 from server.models.user import (
     UserSchema,
-    ResponseModel
+    ResponseModel,
+    ErrorResponseModel,
 )
 
 router = APIRouter()
@@ -22,7 +23,6 @@ async def add_user_data(user: UserSchema = Body(...)):
 
 @router.get("/all", response_description="Users retrieved")
 async def get_users():
-    print("All User is Called")
     users = await retrieve_users()
     if users:
         return ResponseModel(users, "Users data retrieved successfully")

@@ -1,7 +1,9 @@
 from server.database import (
     db
 )
-from fastapi.encoders import jsonable_encoder
+from server.utils import (
+    hash_password
+)
 from bson import ObjectId
 
 users_collection = db["users"]
@@ -23,6 +25,9 @@ def user_helper(user) -> dict:
 
 # Add a new user into to the database
 async def add_user(user_data: dict):
+    password = hash_password(user_data["password"])
+    print("Password is ", password)
+    user_data["password"] = password
     user =  users_collection.insert_one(user_data)
     new_user =  users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
