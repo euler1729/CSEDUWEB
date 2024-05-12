@@ -1,11 +1,11 @@
-from server.database import (
+from app.server.database import (
     db
 )
-from server.utils import (
+from app.server.utils import (
     hash_password,
     verify_password,
 )
-from server.models.auth import (
+from app.server.models.auth import (
     Token,
     DataToken,
     UserLogin,

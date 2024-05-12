@@ -1,6 +1,6 @@
 from functools import wraps
 from fastapi import Request, Response, status
-from server.controller.auth import (
+from app.server.controller.auth import (
     verify_token,
 )
 
