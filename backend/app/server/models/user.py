@@ -60,7 +60,7 @@ class UserLogin(BaseModel):
     password: str = Field(...)
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "email": "jdoe@gmail.com",
                 "password": "password",

@@ -1,21 +1,21 @@
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 
-from app.server.controller.user import (
+from server.controller.user import (
     add_user,
     retrieve_users,
     retrieve_user,
     update_user,
 
 )
-from app.server.models.user import (
+from server.models.user import (
     UserSchema,
     ResponseModel,
     ErrorResponseModel,
 
 )
 
-from app.server.middlewares.auth import (
+from server.middlewares.auth import (
     check_token
 )
 

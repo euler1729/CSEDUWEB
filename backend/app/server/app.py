@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.server.routes.user import router as UserRouter
-from app.server.routes.auth import router as AuthRouter
-from app.server.routes.news import router as NewsRouter
-from app.server.routes.event import router as EventRouter
+from server.routes.user import router as UserRouter
+from server.routes.auth import router as AuthRouter
+from server.routes.news import router as NewsRouter
+from server.routes.event import router as EventRouter
 
 app = FastAPI()
 

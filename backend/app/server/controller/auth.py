@@ -1,11 +1,11 @@
-from app.server.database import (
+from server.database import (
     db
 )
-from app.server.utils import (
+from server.utils import (
     hash_password,
     verify_password,
 )
-from app.server.models.auth import (
+from server.models.auth import (
     Token,
     DataToken,
     UserLogin,
@@ -28,9 +28,10 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 300
 
 
 def verify_token(token: str = Depends(oauth2_scheme)):
+    # print(token)
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        # print(payload.get("id"))
+        # print(payload)
         user = users_collection.find_one({"_id": ObjectId(payload.get("id"))})
         # print(user["_id"])
         if user:
