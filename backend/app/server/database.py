@@ -8,10 +8,6 @@ uri = "mongodb+srv://IP_Lab:in3JffMHPrAdlzM3@cluster0.bnmqd0w.mongodb.net/?retry
 
 client = MongoClient(uri)
 db = client["user_db"]
-<<<<<<< HEAD
-users_collection = db["users"]
-=======
 users_collection = db["users"]
 news_collection=db["news"]
 events_collection=db["events"]
->>>>>>> events-and-news
