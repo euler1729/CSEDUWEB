@@ -5,6 +5,7 @@ from server.routes.user import router as UserRouter
 from server.routes.auth import router as AuthRouter
 from server.routes.news import router as NewsRouter
 from server.routes.event import router as EventRouter
+from server.routes.research import router as ResearchRouter
 
 app = FastAPI()
 
@@ -12,6 +13,7 @@ app.include_router(UserRouter, tags=["User"], prefix="/user")
 app.include_router(AuthRouter, tags=["Auth"], prefix="/auth")
 app.include_router(NewsRouter, tags=["News"], prefix="/news")
 app.include_router(EventRouter, tags=["Event"], prefix="/event")
+app.include_router(ResearchRouter, tags=["Research"], prefix="/research")
 
 # Enable CORS
 app.add_middleware(
