@@ -10,7 +10,7 @@ def teacher_helper(teacher, user) -> dict:
     return {
         "id": str(teacher["_id"]),
         "user": {
-            "id": str(user["_id"]),
+            "id": str(teacher["user_id"]),
             "first_name": user["first_name"],
             "last_name": user["last_name"],
             "email": user["email"],

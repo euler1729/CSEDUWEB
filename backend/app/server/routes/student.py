@@ -101,21 +101,21 @@ async def delete_one_student(request: Request, response: Response, student_id: s
 
 @router.delete("/delete-all", response_description="Delete all students with the same student_id")
 @check_token
-async def delete_all_students(request: Request, response: Response, student_id: str = Body(...)):
+async def delete_all_students(request: Request, response: Response):
     user = request.state.user
     if user['role'] != 'admin':
         response.status_code = 401
         return ErrorResponseModel("Unauthorized", "Unauthorized")
     
-    delete_result = db["students"].delete_many({"student_id": student_id})
+    delete_result = db["students"].delete_many({})
     if delete_result.deleted_count > 0:
-        alumni_delete_result = db["alumni"].delete_many({"student_id": student_id})
+        alumni_delete_result = db["alumni"].delete_many({})
         return ResponseModel(
             "{} students and {} corresponding alumni deleted successfully".format(delete_result.deleted_count, alumni_delete_result.deleted_count),
             "All students and corresponding alumni with the same student_id deleted successfully",
         )
     return ResponseModel(
         "An error occurred",
-        "No students found with student_id: {}".format(student_id),
+        "No students found ",
     )
 __all__ = ["router"]
