@@ -16,7 +16,7 @@ class EventsBaseModel(BaseModel):
                 "description": "something about the event",
                 "venue":"CSE,DU",
                 "date_and_time" : "20-05-2024 10:00 AM",
-                "photo": "photo url",
+                "photo": "photo url"
             }
         }
 

@@ -65,3 +65,10 @@ async def get_event_by_id(id: str):
     if events:
         return event_helper(event=events)
     return None
+
+# deleting event by id
+async def event_delete(id: str):
+    events = events_collection.delete_one({"_id": ObjectId(id)})
+    if events.deleted_count == 1:
+        return True
+    return False
