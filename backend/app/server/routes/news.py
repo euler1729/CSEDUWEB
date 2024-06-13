@@ -1,21 +1,21 @@
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 
-from app.server.controller.news import (
+from server.controller.news import (
     add_news,
     update_news,
     get_news,
     get_news_by_id
 )
-from app.server.models.news import (
+from server.models.news import (
     NewsBaseModel,
     UpdateNewsBaseModel,
 )
 
-from app.server.middlewares.auth import (
+from server.middlewares.auth import (
     check_token
 )
-from app.server.models.user import (
+from server.models.user import (
     UserSchema,
     ResponseModel,
     ErrorResponseModel,

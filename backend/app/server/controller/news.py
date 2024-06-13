@@ -1,10 +1,10 @@
-from app.server.database import (
+from server.database import (
     db
 )
-from app.server.utils import (
+from server.utils import (
     hash_password
 )
-from app.server.controller.auth import (
+from server.controller.auth import (
     verify_token
 )
 from bson import ObjectId

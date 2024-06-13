@@ -1,23 +1,23 @@
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 
-from app.server.controller.event import (
+from server.controller.event import (
     get_event_by_id,
     get_events,
     add_event,
     update_event
 )
 
-from app.server.models.event import (
+from server.models.event import (
     EventsBaseModel,
     UpdateEventsBaseModel
 )
 
 
-from app.server.middlewares.auth import (
+from server.middlewares.auth import (
     check_token
 )
-from app.server.models.user import (
+from server.models.user import (
     UserSchema,
     ResponseModel,
     ErrorResponseModel,
