@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from server.database import (
     db
 )
@@ -5,12 +6,26 @@ from server.utils import (
     hash_password
 )
 from server.controller.auth import (
+=======
+from app.server.database import (
+    db
+)
+from app.server.utils import (
+    hash_password
+)
+from app.server.controller.auth import (
+>>>>>>> events-and-news
     verify_token
 )
 from bson import ObjectId
 from fastapi import Request, Response, status
 
 users_collection = db["users"]
+<<<<<<< HEAD
+=======
+news_collection=db["news"]
+events_collection=db["events"]
+>>>>>>> events-and-news
 
 
 # helpers
@@ -27,6 +42,10 @@ def user_helper(user) -> dict:
         "role": user["role"],
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> events-and-news
 # Add a new user into to the database
 async def add_user(user_data: dict):
     password = hash_password(user_data["password"])
@@ -35,7 +54,11 @@ async def add_user(user_data: dict):
     user =  users_collection.insert_one(user_data)
     new_user =  users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> events-and-news
 # Retrieve all users present in the database
 async def retrieve_users():
     users = users_collection.find()
@@ -44,6 +67,11 @@ async def retrieve_users():
         user_list.append(user_helper(user))
     return user_list
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> events-and-news
 # Retrieve a user with a matching ID
 async def retrieve_user(id: str):
     user =  users_collection.find_one({"_id": ObjectId(id)})
@@ -51,6 +79,10 @@ async def retrieve_user(id: str):
         return user_helper(user)
     return None
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> events-and-news
 # Update a user with a matching ID
 async def update_user(id: str, data: dict):
     # Return false if an empty request body is sent.
@@ -63,4 +95,8 @@ async def update_user(id: str, data: dict):
         )
         if updated_user:
             return True
+<<<<<<< HEAD
         return False
+=======
+        return False
+>>>>>>> events-and-news

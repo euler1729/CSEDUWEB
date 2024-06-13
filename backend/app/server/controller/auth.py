@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from server.database import (
     db
 )
@@ -6,6 +7,16 @@ from server.utils import (
     verify_password,
 )
 from server.models.auth import (
+=======
+from app.server.database import (
+    db
+)
+from app.server.utils import (
+    hash_password,
+    verify_password,
+)
+from app.server.models.auth import (
+>>>>>>> events-and-news
     Token,
     DataToken,
     UserLogin,
@@ -19,6 +30,10 @@ from typing import Optional
 
 users_collection = db["users"]
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> events-and-news
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="*/login")
 
 SECRET_KEY = "54ddb88bfd0cd599dcb0a15f5edaca312815a3ff6dc0731fb404b605f692b87b"

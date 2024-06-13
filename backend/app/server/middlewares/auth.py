@@ -1,6 +1,10 @@
 from functools import wraps
 from fastapi import Request, Response, status
+<<<<<<< HEAD
 from server.controller.auth import (
+=======
+from app.server.controller.auth import (
+>>>>>>> events-and-news
     verify_token,
 )
 

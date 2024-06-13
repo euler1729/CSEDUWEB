@@ -28,6 +28,10 @@ class UserSchema(BaseModel):
             }
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> events-and-news
 class UpdateUserModel(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
@@ -66,6 +70,11 @@ class UserLogin(BaseModel):
             }
         }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> events-and-news
 def ResponseModel(data, message):
     return {
         "data": data,
