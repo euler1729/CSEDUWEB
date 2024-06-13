@@ -61,6 +61,7 @@ async def get_all_research_(request: Request, response: Response):
 @check_token
 async def get_research_id(request: Request, response: Response, research_id: str):
     research = await get_research_by_id(id=research_id)
+    print(research_id, research)
     if research:
         return ResponseModel(research, "Research viewed successfully")
     return ResponseModel(research, "Couldn't find this research")
