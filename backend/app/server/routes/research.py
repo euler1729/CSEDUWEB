@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
+from bson import ObjectId
+from server.database import db
 
 from server.controller.research import (
     add_research,
@@ -65,5 +67,40 @@ async def get_research_id(request: Request, response: Response, research_id: str
     if research:
         return ResponseModel(research, "Research viewed successfully")
     return ResponseModel(research, "Couldn't find this research")
+# Deleting a research publication
+@router.delete("/delete/{research_id}", response_description="Delete a research publication")
+@check_token
+async def delete_one_research(request: Request, response: Response, research_id: str):
+    user = request.state.user
+    if user['role'] != 'admin':
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    try:
+        delete_result = db["research"].delete_one({"_id": ObjectId(research_id)})
+        if delete_result.deleted_count == 1:
+            return ResponseModel(
+            "Research with ID: {} deleted successfully".format(research_id),
+            "Research deleted successfully",
+        )
+    except Exception as e:
+        print(e)
+        return ResponseModel(
+        "An error occurred",
+        "Research with ID: {} not found".format(research_id),
+    )
 
+# Deleting all research publications
+@router.delete("/delete-all", response_description="Delete all research publications")
+@check_token
+async def delete_all_research(request: Request, response: Response):
+    user = request.state.user
+    if user['role'] != 'admin':
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    
+    delete_result = db["research"].delete_many({})
+    return ResponseModel(
+        "{} research publications deleted successfully".format(delete_result.deleted_count),
+        "All research publications deleted successfully",
+    )
 __all__ = ["router"]
