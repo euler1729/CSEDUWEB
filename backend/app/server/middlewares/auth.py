@@ -21,6 +21,8 @@ def check_token(func):
                 return {"message": "Unauthorized"}
         except Exception as e:
             response.status_code = 401
-            return {"message": "Unauthorized"}
+            return {
+                # "message": "Unauthorized", 
+                    "error": str(e)}
         
     return wrapper

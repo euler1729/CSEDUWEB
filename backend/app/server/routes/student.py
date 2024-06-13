@@ -24,7 +24,7 @@ router = APIRouter()
 
 @router.post("/add", response_description="Student data added into the database")
 @check_token
-async def add_student_data(student: StudentSchema = Body(...)):
+async def add_student_data(request: Request, response: Response,student: StudentSchema = Body(...)):
     student = jsonable_encoder(student)
     new_student = await add_student(student)
     return ResponseModel(new_student, "Student added successfully.")
