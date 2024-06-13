@@ -33,10 +33,17 @@ def student_helper(student, user) -> dict:
 
 # Add a new student into the database
 async def add_student(student_data: dict):
-    student = students_collection.insert_one(student_data)
-    new_student = students_collection.find_one({"_id": student.inserted_id})
-    user = await retrieve_user(new_student["user_id"])
-    return student_helper(new_student, user)
+    try:
+        existing_student = students_collection.find_one({"user_id": student_data["user_id"]})
+        if existing_student:
+            raise ValueError("Student with this user ID already exists.")
+        
+        student = students_collection.insert_one(student_data)
+        new_student = students_collection.find_one({"_id": student.inserted_id})
+        user = await retrieve_user(new_student["user_id"])
+        return student_helper(new_student, user)
+    except Exception as e:
+        raise ValueError(f"An error occurred while adding student data: {e}")
 
 # Retrieve all students present in the database
 async def retrieve_students():
@@ -68,3 +75,16 @@ async def update_student(id: str, data: dict):
             user = await retrieve_user(student["user_id"])
             return student_helper(student, user)
     return False
+async def delete_student(student_id: str):
+    try:
+        result = await students_collection.delete_one({"_id": ObjectId(student_id)})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e
+
+async def delete_all_students():
+    try:
+        result = await students_collection.delete_many({})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e

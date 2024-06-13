@@ -21,10 +21,18 @@ def alumni_helper(alumni, student) -> dict:
 
 # Add a new alumni into the database
 async def add_alumni(alumni_data: dict):
-    alumni = alumni_collection.insert_one(alumni_data)
-    new_alumni = alumni_collection.find_one({"_id": alumni.inserted_id})
-    student = await retrieve_student(new_alumni["student_id"])
-    return alumni_helper(new_alumni, student)
+    try:
+        existing_alumni = alumni_collection.find_one({"student_id": alumni_data["student_id"]})
+        if existing_alumni:
+            raise ValueError("Alumni with this student ID already exists.")
+        student = await retrieve_student(alumni_data["student_id"])
+        alumni = alumni_collection.insert_one(alumni_data)
+        new_alumni = alumni_collection.find_one({"_id": alumni.inserted_id})
+        return alumni_helper(new_alumni, student)
+    except Exception as e:
+        raise ValueError(f"An error occurred while adding alumni data: {e}")
+    
+    
 
 # Retrieve all alumni present in the database
 async def retrieve_alumni():
@@ -56,3 +64,16 @@ async def update_alumni(id: str, data: dict):
             student = await retrieve_student(alumni["student_id"])
             return alumni_helper(alumni, student)
     return False
+async def delete_alumni(alumni_id: str):
+    try:
+        result = await alumni_collection.delete_one({"_id": ObjectId(alumni_id)})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e
+
+async def delete_all_alumni():
+    try:
+        result = await alumni_collection.delete_many({})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e

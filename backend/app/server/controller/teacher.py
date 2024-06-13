@@ -40,13 +40,11 @@ async def add_teacher(teacher_data: dict):
         existing_teacher = teachers_collection.find_one({"user_id": teacher_data["user_id"]})
         if existing_teacher:
             raise ValueError("Teacher with this user ID already exists.")
-        
+        user = await retrieve_user(teacher_data["user_id"])
         teacher = teachers_collection.insert_one(teacher_data)
         new_teacher = teachers_collection.find_one({"_id": teacher.inserted_id})
-        user = await retrieve_user(new_teacher["user_id"])
+        
         return teacher_helper(new_teacher, user)
-    except ValueError as e:
-        raise e
     except Exception as e:
         raise ValueError(f"An error occurred while adding teacher data: {e}")
 
@@ -90,3 +88,17 @@ async def update_teacher(id: str, data: dict):
         return False
     except Exception as e:
         raise ValueError(f"An error occurred while updating teacher with ID {id}: {e}")
+    
+async def delete_teacher(teacher_id: str):
+    try:
+        result = await teachers_collection.delete_one({"_id": ObjectId(teacher_id)})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e
+
+async def delete_all_teachers():
+    try:
+        result = await teachers_collection.delete_many({})
+        return result.deleted_count > 0
+    except Exception as e:
+        raise e

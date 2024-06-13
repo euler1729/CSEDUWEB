@@ -43,10 +43,10 @@ async def add_staff(staff_data: dict):
         existing_staff = staff_collection.find_one({"user_id": staff_data["user_id"]})
         if existing_staff:
             raise ValueError("Staff with this user ID already exists.")
-        
+        user = await retrieve_user(staff_data["user_id"])
         staff = staff_collection.insert_one(staff_data)
         new_staff = staff_collection.find_one({"_id": staff.inserted_id})
-        user = await retrieve_user(new_staff["user_id"])
+        
         return staff_helper(new_staff, user)
     except ValueError as e:
         raise e
