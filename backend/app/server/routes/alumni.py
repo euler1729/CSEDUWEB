@@ -28,6 +28,9 @@ router = APIRouter()
 async def add_alumni_data(request: Request, response: Response,alumni: AlumniSchema = Body(...)):
     alumni = jsonable_encoder(alumni)
     new_alumni = await add_alumni(alumni)
+    if "error" in new_alumni:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return ErrorResponseModel("An error occurred", new_alumni["error"], "Alumni Not Created.")
     return ResponseModel(new_alumni, "Alumni added successfully.")
 
 @router.get("/all", response_description="Alumni retrieved")

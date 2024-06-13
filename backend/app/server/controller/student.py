@@ -30,13 +30,26 @@ def student_helper(student, user) -> dict:
         "advisor": student.get("advisor"),
     }
 
-# Add a new student into the database
+# Function to add a new student with duplicacy check and error handling
 async def add_student(student_data: dict):
-    student = students_collection.insert_one(student_data)
-    new_student = students_collection.find_one({"_id": student.inserted_id})
-    user = await retrieve_user(new_student["user_id"])
-    return student_helper(new_student, user)
+    try:
+        # Check for duplicacy based on a unique field (e.g., email or user_id)
+        existing_student = db["students"].find_one({"user_id": student_data["user_id"]})
+        if existing_student:
+            return {"error": "Student with this user ID already exists."}
+        
+        # Check if the user exists
+        user = db["users"].find_one({"_id": ObjectId(student_data["user_id"])})
+        if not user:
+            return {"error": "User with this ID does not exist."}
 
+        # Insert the new student
+        student = db["students"].insert_one(student_data)
+        new_student = db["students"].find_one({"_id": student.inserted_id})
+        return {"data": student_helper(new_student, user), "message": "Student added successfully."}
+    except Exception as e:
+        return {"error": str(e)}
+    
 # Retrieve all students present in the database
 async def retrieve_students():
     students = students_collection.find()

@@ -28,6 +28,9 @@ router = APIRouter()
 async def add_teacher_data(request: Request, response: Response, teacher: TeacherUserSchema = Body(...)):
     teacher = jsonable_encoder(teacher)
     new_teacher = await add_teacher(teacher)
+    if "error" in new_teacher:
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return ErrorResponseModel("An error occurred", new_teacher["error"], "Teacher Not Created.")
     return ResponseModel(new_teacher, "Teacher added successfully.")
 
 @router.get("/all", response_description="Teachers retrieved")

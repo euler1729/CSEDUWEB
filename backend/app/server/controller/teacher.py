@@ -26,12 +26,25 @@ def teacher_helper(teacher, user) -> dict:
         "photo": teacher["photo"],
     }
 
-# Add a new teacher into the database
+# Function to add a new teacher with duplicacy check and error handling
 async def add_teacher(teacher_data: dict):
-    teacher = teachers_collection.insert_one(teacher_data)
-    new_teacher = teachers_collection.find_one({"_id": teacher.inserted_id})
-    user = await retrieve_user(new_teacher["user_id"])
-    return teacher_helper(new_teacher, user)
+    try:
+        # Check for duplicacy based on a unique field (e.g., email or user_id)
+        existing_teacher = db["teachers"].find_one({"user_id": teacher_data["user_id"]})
+        if existing_teacher:
+            return {"error": "Teacher with this user ID already exists."}
+        
+        # Check if the user exists
+        user = db["users"].find_one({"_id": ObjectId(teacher_data["user_id"])})
+        if not user:
+            return {"error": "User with this ID does not exist."}
+
+        # Insert the new teacher
+        teacher = db["teachers"].insert_one(teacher_data)
+        new_teacher = db["teachers"].find_one({"_id": teacher.inserted_id})
+        return {"data": teacher_helper(new_teacher, user), "message": "Teacher added successfully."}
+    except Exception as e:
+        return {"error": str(e)}
 
 # Retrieve all teachers present in the database
 async def retrieve_teachers():
