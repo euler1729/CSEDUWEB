@@ -45,14 +45,17 @@ async def update_news_(request: Request, response: Response, news_id, updated_ne
 @router.post("/add", response_description="News has been added")
 @check_token
 async def create_news(request: Request, response: Response, news: NewsBaseModel = Body(...)):
-    recent_news = jsonable_encoder(news)
-    recent = await add_news(recent_news)
-    return ResponseModel(recent, "News added successfully")
+    try:
+        news = jsonable_encoder(news)
+        recent_news = await add_news(news)
+        return ResponseModel(recent_news, "News added successfully")
+    except:
+        return ErrorResponseModel("An error occurred", status="400")
 
 
 # getting all news
 @router.get("/all", response_description="News viewed")
-# @check_token
+@check_token
 async def get_news_(request: Request, response: Response,):
     recent_news = await get_news()
     if recent_news:
@@ -65,7 +68,7 @@ async def get_news_(request: Request, response: Response,):
 async def get_news_id(request: Request, response: Response, news_id):
     news = await get_news_by_id(id=news_id)
     if news:
-        return ResponseModel("News are viewed successfully")
+        return ResponseModel(news, "News are viewed successfully")
     return ResponseModel(news, "Couldn't find this news")
 
 __all__ = ["router"]
