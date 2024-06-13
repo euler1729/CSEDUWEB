@@ -38,6 +38,9 @@ async def add_user(user_data: dict):
     password = hash_password(user_data["password"])
     print("Password is ", password)
     user_data["password"] = password
+    exist = users_collection.find_one({"email": user_data["email"]})
+    if exist:
+        return False
     user =  users_collection.insert_one(user_data)
     new_user =  users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
