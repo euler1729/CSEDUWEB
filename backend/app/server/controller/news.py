@@ -10,7 +10,7 @@ from server.controller.auth import (
 from bson import ObjectId
 from fastapi import Request, Response, status
 
-news_collection=db["news"]
+news_collection = db["news"]
 
 
 # helper function for news
@@ -57,6 +57,5 @@ async def get_news():
 async def get_news_by_id(id:str):
     news=news_collection.find_one({"_id":ObjectId(id)})
     if news:
-        return news_collection(news)
+        return news_helper(news)
     return None
-

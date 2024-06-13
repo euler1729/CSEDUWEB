@@ -7,6 +7,10 @@ from server.utils import (
 from server.controller.auth import (
     verify_token
 )
+from server.middlewares.auth import (
+    check_token
+)
+
 from bson import ObjectId
 from fastapi import Request, Response, status
 
@@ -37,6 +41,7 @@ async def add_user(user_data: dict):
     user =  users_collection.insert_one(user_data)
     new_user =  users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
+
 # Retrieve all users present in the database
 async def retrieve_users():
     users = users_collection.find()
@@ -44,8 +49,6 @@ async def retrieve_users():
     for user in users:
         user_list.append(user_helper(user))
     return user_list
-
-
 
 # Retrieve a user with a matching ID
 async def retrieve_user(id: str):
