@@ -62,11 +62,10 @@ async def update_student_data(request: Request, response: Response, student_id: 
     updated_student = await update_student(student_id, student)
     if updated_student:
         return ResponseModel(
-            "Student with ID: {} name update is successful".format(student_id),
+            "Student with ID: {} update is successful".format(student_id),
             "Student name updated successfully",
         )
     return ResponseModel(
-        "An error occurred",
         "An error occurred",
         status="400",
     )

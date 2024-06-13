@@ -63,7 +63,7 @@ async def update_teacher_data(request: Request, response: Response, teacher_id: 
     updated_teacher = await update_teacher(teacher_id, teacher)
     if updated_teacher:
         return ResponseModel(
-            "Teacher with ID: {} name update is successful".format(teacher_id),
+            "Teacher with ID: {} update is successful".format(teacher_id),
             "Teacher name updated successfully",
         )
     return ResponseModel(
