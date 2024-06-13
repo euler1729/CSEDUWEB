@@ -21,10 +21,24 @@ def alumni_helper(alumni, student) -> dict:
 
 # Add a new alumni into the database
 async def add_alumni(alumni_data: dict):
-    alumni = alumni_collection.insert_one(alumni_data)
-    new_alumni = alumni_collection.find_one({"_id": alumni.inserted_id})
-    student = await retrieve_student(new_alumni["student_id"])
-    return alumni_helper(new_alumni, student)
+    try:
+        # Check if the student ID already exists in the alumni collection
+        if alumni_collection.find_one({"student_id": alumni_data["student_id"]}):
+            return {"error": "Alumni with this student ID already exists."}
+
+        # Retrieve the student information
+        student = await retrieve_student(alumni_data["student_id"])
+        if not student:
+            return {"error": "Student not found."}
+
+        # Insert the new alumni data
+        alumni = alumni_collection.insert_one(alumni_data)
+        new_alumni = alumni_collection.find_one({"_id": alumni.inserted_id})
+
+        return alumni_helper(new_alumni, student)
+
+    except Exception as e:
+        return {"error": str(e)}
 
 # Retrieve all alumni present in the database
 async def retrieve_alumni():
