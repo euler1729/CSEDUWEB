@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
-
+from server.database import db
+from bson import ObjectId
 from server.controller.alumni import (
     add_alumni,
     retrieve_alumni,
@@ -24,7 +25,7 @@ router = APIRouter()
 
 @router.post("/add", response_description="Alumni data added into the database")
 @check_token
-async def add_alumni_data(alumni: AlumniSchema = Body(...)):
+async def add_alumni_data(request: Request, response: Response,alumni: AlumniSchema = Body(...)):
     alumni = jsonable_encoder(alumni)
     new_alumni = await add_alumni(alumni)
     return ResponseModel(new_alumni, "Alumni added successfully.")
@@ -69,6 +70,37 @@ async def update_alumni_data(request: Request, response: Response, alumni_id: st
         "An error occurred",
         "An error occurred",
         status="400",
+    )
+@router.delete("/delete/{alumni_id}", response_description="Delete an alumni")
+@check_token
+async def delete_one_alumni(request: Request, response: Response, alumni_id: str):
+    if alumni_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    
+    delete_result = db["alumni"].delete_one({"_id": ObjectId(alumni_id)})
+    if delete_result.deleted_count == 1:
+        return ResponseModel(
+            "Alumni with ID: {} deleted successfully".format(alumni_id),
+            "Alumni deleted successfully",
+        )
+    return ResponseModel(
+        "An error occurred",
+        "Alumni with ID: {} not found".format(alumni_id),
+    )
+
+@router.delete("/delete-all", response_description="Delete all alumni")
+@check_token
+async def delete_all_alumni(request: Request, response: Response):
+    user = request.state.user
+    if user['role'] != 'admin':
+        response.status_code = 401
+        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    
+    delete_result = db["alumni"].delete_many({})
+    return ResponseModel(
+        "{} alumni deleted successfully".format(delete_result.deleted_count),
+        "All alumni deleted successfully",
     )
 
 __all__ = ["router"]
