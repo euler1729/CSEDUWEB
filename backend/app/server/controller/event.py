@@ -118,6 +118,36 @@ async def event_register(event_id: str, form: dict):
         print(e)
         return False
 
+# updating event registration
+async def update_event_registration(form: dict):
+    try:
+        id = form["id"]
+
+        event_registration = event_registration_form_collection.find_one({"_id": ObjectId(id)})
+
+        if not event_registration:
+            return False
+
+        updated_event_registration = event_registration_form_collection.update_one({"_id": ObjectId(id)}, 
+            {
+                "$set":{
+                    "name": form["name"] if form["name"] else event_registration["name"],
+                    "email": form["email"] if form["email"] else event_registration["email"],
+                    "phone": form["phone"] if form["phone"] else event_registration["phone"],
+                    "amount": form["amount"] if form["amount"] else event_registration["amount"],
+                    "trxId": form["trxId"] if form["trxId"] else event_registration["trxId"],
+                    "comment": form["comment"] if form["comment"] else event_registration["comment"],
+                    "status": form["status"] if form["status"] else event_registration["status"]
+                }
+            }
+        )
+        if updated_event_registration:
+            return True
+        return False        
+    except Exception as e:
+        print(e)
+        return False
+
 async def get_event_registration_list(event_id: str):
     event_registration = event_registration_form_collection.find({"event_id": event_id})
     list = []
