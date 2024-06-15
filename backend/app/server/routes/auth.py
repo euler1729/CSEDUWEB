@@ -27,9 +27,9 @@ router = APIRouter()
 
 @router.post('/login', response_description="access token generated")
 async def login_user(user: UserLogin = Body(...)):
-    access_token = await authenticate_user(user.email, user.password)
-    if access_token:
-        return Token(access_token=access_token, token_type="bearer")
+    login_info = await authenticate_user(user.email, user.password)
+    if login_info:
+        return Token(access_token=login_info['access_token'], token_type="bearer", id=str(login_info["_id"]))
     return ErrorResponseModel("An error occurred", 404, "Invalid credentials")
 
 

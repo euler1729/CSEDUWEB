@@ -19,7 +19,7 @@ def event_helper(event) -> dict:
     try:
         allowed_roles = event["allowed_roles"] if event["allowed_roles"] else 1
     except Exception as e:
-        print(e)
+        # print(e)
         allowed_roles = 1
     return {
         "id": str(event["_id"]),

@@ -10,6 +10,7 @@ from server.models.auth import (
     DataToken,
     UserLogin,
 )
+
 from bson import ObjectId
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, status
@@ -63,4 +64,5 @@ async def authenticate_user(email: str, password: str):
     if not verify_password(password, user["password"]):
         return False
     access_token = create_access_token(data={"id": str(user["_id"])})
-    return access_token
+
+    return {"access_token": access_token, "_id": str(user["_id"])}

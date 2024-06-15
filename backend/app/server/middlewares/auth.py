@@ -12,7 +12,7 @@ def check_token(func):
             token = request.headers['authorization'].split('Bearer ')[1]
             user = verify_token(token)
             if user:
-                print("Authorized")
+                # print("Authorized")
                 request.state.user = user
                 return await func(request, response, *args, **kwargs)
             else:
