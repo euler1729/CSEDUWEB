@@ -4,12 +4,14 @@ from pydantic import BaseModel, EmailStr, Field
 class Token(BaseModel):
     access_token: str
     token_type: str
+    id: str
 
     class Config:
         json_schema_extra = {
             "example": {
                 "access_token": "eyJ",
-                "token_type": "bearer"
+                "token_type": "bearer",
+                "id": "5f1b7c9c1c2d9a2e3d1e1d8f"
             }
         }
 

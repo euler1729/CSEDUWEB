@@ -11,10 +11,16 @@ from bson import ObjectId
 from fastapi import Request, Response, status
 
 events_collection = db["events"]
+event_registration_form_collection = db["event_registration_form"]
 
 
 # helper function for events
 def event_helper(event) -> dict:
+    try:
+        allowed_roles = event["allowed_roles"] if event["allowed_roles"] else 1
+    except Exception as e:
+        # print(e)
+        allowed_roles = 1
     return {
         "id": str(event["_id"]),
         "event_title": event["event_title"],
@@ -22,9 +28,23 @@ def event_helper(event) -> dict:
         "description": event["description"],
         "venue": event["venue"],
         "date_and_time": event["date_and_time"],
-        "photo": event["photo"]
+        "photo": event["photo"],
+        "allowed_roles": allowed_roles
     }
 
+def event_registration_helper(event) -> dict:
+    return {
+        "id": str(event["_id"]),
+        "event_id": event["event_id"],
+        "user_id": event["user_id"],
+        "name": event["name"],
+        "email": event["email"],
+        "phone": event["phone"],
+        "amount": event["amount"],
+        "trxId": event["trxId"],
+        "comment": event["comment"],
+        "status": event["status"]
+    }
 
 # for adding an event
 async def add_event(event_data: dict):
@@ -61,10 +81,49 @@ async def update_event(id: str, updated_data: dict):
 
 # news by id
 async def get_event_by_id(id: str):
-    events = events_collection.find_one({"_id": ObjectId(id)})
-    if events:
-        return event_helper(event=events)
+    event = events_collection.find_one({"_id": ObjectId(id)})
+    if event:
+        return event_helper(event=event)
     return None
+
+# event registration
+async def event_register(event_id: str, form: dict):
+    try:
+        query = {
+            "$or": []
+        }
+        if form['email'] and form['email'] != "null":
+            query['$or'].append({"event_id":event_id, "email": form['email']})
+        if form['user_id'] and form['user_id'] != "null":
+            query['$or'].append({"event_id":event_id, "user_id": form['user_id']})
+
+        # print(query)
+        
+        if len(query['$or']) == 0:
+            return False
+        
+        event_registration = event_registration_form_collection.find_one(query)
+
+        if event_registration:
+            print("Already registered")
+            return False
+        try:
+            recent_event_registration = event_registration_form_collection.insert_one(form)
+            print(recent_event_registration)
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    except Exception as e:
+        print(e)
+        return False
+
+async def get_event_registration_list(event_id: str):
+    event_registration = event_registration_form_collection.find({"event_id": event_id})
+    list = []
+    for i in event_registration:
+        list.append(event_registration_helper(i))
+    return list
 
 # deleting event by id
 async def event_delete(id: str):
