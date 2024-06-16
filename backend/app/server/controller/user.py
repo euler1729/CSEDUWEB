@@ -55,10 +55,19 @@ async def retrieve_users():
 
 # Retrieve a user with a matching ID
 async def retrieve_user(id: str):
-    user =  users_collection.find_one({"_id": ObjectId(id)})
-    if user:
-        return user_helper(user)
-    return None
+    try:
+        query = {
+            "$or": [
+                {"_id": ObjectId(id)},
+                {"email": id}
+            ]
+        }
+        user = users_collection.find_one(query)
+        if user:
+            return user_helper(user)
+        return False
+    except:
+        return False
 
 # Update a user with a matching ID
 async def update_user(id: str, data: dict):

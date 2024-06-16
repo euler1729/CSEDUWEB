@@ -1,10 +1,8 @@
 from pymongo import MongoClient
+import os
 
 print("Connecting to MongoDB...")
-uri = "mongodb+srv://IP_Lab:in3JffMHPrAdlzM3@cluster0.bnmqd0w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-# Here Change your username password Only Third Bracket part
-# uri = "mongodb+srv://[]:[]@cluster0.bnmqd0w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
+uri = os.getenv("MONGO_URI")
 
 client = MongoClient(uri)
 db = client["user_db"]
