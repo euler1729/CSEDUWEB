@@ -67,6 +67,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 async def authenticate_user(email: str, password: str):
     user = users_collection.find_one({"email": email})
+    print(user)
     if not user:
         return False
     if not verify_password(password, user["password"]):

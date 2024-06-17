@@ -12,6 +12,7 @@ class UserSchema(BaseModel):
     state: str = Field(...)
     password: str = Field(...)
     role: str = Field(...)
+    photo: Optional[str]
     
     class Config:
         json_schema_extra = {
@@ -24,7 +25,8 @@ class UserSchema(BaseModel):
                 "city": "Dhaka",
                 "state": "Dhaka",
                 "password": "password",
-                "role": "admin"
+                "role": "admin",
+                "photo": "photo.jpg"
             }
         }
 
@@ -38,6 +40,7 @@ class UpdateUserModel(BaseModel):
     state: Optional[str]
     password: Optional[str]
     role: Optional[str]
+    photo: Optional[str]
     
     class Config:
         json_schema_extra = {
@@ -50,7 +53,8 @@ class UpdateUserModel(BaseModel):
                 "city": "Dhaka",
                 "state": "Dhaka",
                 "password": "password",
-                "role": "admin"
+                "role": "admin",
+                "photo": "photo.jpg"
             }
         }
 

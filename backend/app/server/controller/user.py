@@ -31,12 +31,13 @@ def user_helper(user) -> dict:
         "city": user["city"],
         "state": user["state"],
         "role": user["role"],
+        "photo": user["photo"] if "photo" in user else None
     }
 
 # Add a new user into to the database
 async def add_user(user_data: dict):
     password = hash_password(user_data["password"])
-    print("Password is ", password)
+    # print("Password is ", password)
     user_data["password"] = password
     exist = users_collection.find_one({"email": user_data["email"]})
     if exist:
