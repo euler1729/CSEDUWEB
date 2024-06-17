@@ -1,9 +1,10 @@
-from server.database import db
+from server.database import (
+    teachers_collection
+)
 from bson import ObjectId
 from server.controller.user import retrieve_user
 from server.models.teacher import TeacherUserSchema
 
-teachers_collection = db["teachers"]
 
 # helpers
 def teacher_helper(teacher, user) -> dict:

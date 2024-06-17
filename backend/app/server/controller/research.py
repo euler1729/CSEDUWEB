@@ -1,7 +1,9 @@
-from server.database import db
+from server.database import (
+    research_collection,
+)
 from bson import ObjectId
 
-research_collection = db["research"]
+
 
 # Helper function for research
 def research_helper(research) -> dict:

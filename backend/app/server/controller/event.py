@@ -1,18 +1,11 @@
-from server.database import (
-    db
-)
-from server.utils import (
-    hash_password
-)
-from server.controller.auth import (
-    verify_token
-)
 from bson import ObjectId
 from fastapi import Request, Response, status
 
+from server.database import (
+    db
+)
 events_collection = db["events"]
 event_registration_form_collection = db["event_registration_form"]
-
 
 # helper function for events
 def event_helper(event) -> dict:

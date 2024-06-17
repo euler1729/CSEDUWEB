@@ -1,9 +1,9 @@
-from server.database import db
+from server.database import (
+    students_collection,
+)
 from bson import ObjectId
 from server.controller.user import retrieve_user
 from server.models.student import StudentSchema, UpdateStudentSchema
-
-students_collection = db["students"]
 
 # helpers
 def student_helper(student, user) -> dict:
