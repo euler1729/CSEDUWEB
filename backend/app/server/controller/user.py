@@ -15,8 +15,6 @@ from bson import ObjectId
 from fastapi import Request, Response, status
 
 users_collection = db["users"]
-news_collection=db["news"]
-events_collection=db["events"]
 
 
 # helpers
@@ -55,19 +53,24 @@ async def retrieve_users():
     return user_list
 
 # Retrieve a user with a matching ID
-async def retrieve_user(id: str):
+async def retrieve_user(key: str):
     try:
-        query = {
-            "$or": [
-                {"_id": ObjectId(id)},
-                {"email": id}
-            ]
-        }
-        user = users_collection.find_one(query)
+        user = users_collection.find_one({"_id": ObjectId(key)})
         if user:
             return user_helper(user)
         return False
-    except:
+    except Exception as e:
+        print(e)
+        return False
+# Retrieve a user with a matching Email
+async def retrieve_user_by_email(email: str):
+    try:
+        user = users_collection.find_one({"email": email})
+        if user:
+            return user_helper(user)
+        return False
+    except Exception as e:
+        print(e)
         return False
 
 # Update a user with a matching ID
@@ -81,5 +84,14 @@ async def update_user(id: str, data: dict):
             {"_id": ObjectId(id)}, {"$set": data}
         )
         if updated_user:
+            return True
+        return False
+
+# Delete a user from the database
+async def delete_user(id: str):
+    user =  users_collection.find_one({"_id": ObjectId(id)})
+    if user:
+        deleted_user =  users_collection.delete_one({"_id": ObjectId(id)})
+        if deleted_user:
             return True
         return False

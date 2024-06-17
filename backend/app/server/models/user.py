@@ -12,7 +12,7 @@ class UserSchema(BaseModel):
     state: str = Field(...)
     password: str = Field(...)
     role: str = Field(...)
-    photo: Optional[str]
+    photo: Optional[str] = Field(None)
     
     class Config:
         json_schema_extra = {
