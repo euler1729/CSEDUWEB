@@ -120,7 +120,7 @@ async def register_event(request: Request, response: Response, event_id: str, fo
     try:
         event = await get_event_by_id(id=event_id)
         if not event:
-            return ErrorResponseModel("Event not found", 404)
+            return ErrorResponseModel("Event not found", 404, "Event not found")
             
         user = request.state.user
         if not role_access(event["allowed_roles"], user["role"]):
