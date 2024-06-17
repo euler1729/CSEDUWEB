@@ -20,7 +20,7 @@ async def get_event_stats():
         for event in events_collection.find({}):
             event_id = event["_id"]
             event_title = event["event_title"]
-            count = event_registration_form_collection.count_documents({"event_id": event_id})
+            count = event_registration_form_collection.count_documents({"event_id": str(event_id)})
             event_stats.append({
                 "event_id": str(event_id),
                 "event_title": event_title,
