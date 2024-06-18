@@ -36,10 +36,10 @@ async def add_teacher_data(request: Request, response: Response, teacher: Teache
 @router.get("/all", response_description="Teachers retrieved")
 # @check_token
 async def get_teachers(request: Request, response: Response):
-    user = request.state.user
-    if user['role'] != 'admin':
-        response.status_code = 401
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # user = request.state.user
+    # if user['role'] != 'admin':
+    #     response.status_code = 401
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     teachers = await retrieve_teachers()
     if teachers:
         return ResponseModel(teachers, "Teachers data retrieved successfully")
