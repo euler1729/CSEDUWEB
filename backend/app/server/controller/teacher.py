@@ -1,5 +1,5 @@
 from server.database import (
-    teachers_collection
+    teachers_collection, db
 )
 from bson import ObjectId
 from server.controller.user import retrieve_user
