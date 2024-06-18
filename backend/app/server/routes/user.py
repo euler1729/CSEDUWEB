@@ -29,6 +29,7 @@ router = APIRouter()
 @check_token
 async def add_user_data(request: Request, response: Response, user: UserSchema = Body(...)):
     try:
+        print(user)
         existing_user = await retrieve_user_by_email(user.email)
         if existing_user:
             response.status_code = status.HTTP_400_BAD_REQUEST

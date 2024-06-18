@@ -28,6 +28,7 @@ router = APIRouter()
 @check_token
 async def add_student_data(request: Request, response: Response,student: StudentSchema = Body(...)):
     student = jsonable_encoder(student)
+    print(student)
     new_student = await add_student(student)
     if "error" in new_student:
         response.status_code = status.HTTP_400_BAD_REQUEST
