@@ -48,9 +48,9 @@ async def get_teachers(request: Request, response: Response):
 @router.get("/{teacher_id}")
 # @check_token
 async def get_teacher(request: Request, response: Response, teacher_id: str):
-    if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+    #     response.status_code = status.HTTP_401_UNAUTHORIZED
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     teacher = await retrieve_teacher(teacher_id)
     if teacher:
         return ResponseModel(teacher, "Teacher data retrieved successfully")
@@ -59,9 +59,9 @@ async def get_teacher(request: Request, response: Response, teacher_id: str):
 @router.put("/update/{teacher_id}")
 @check_token
 async def update_teacher_data(request: Request, response: Response, teacher_id: str, teacher: UpdateTeacherUserSchema = Body(...)):
-    if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+    #     response.status_code = status.HTTP_401_UNAUTHORIZED
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     teacher = {k: v for k, v in teacher.dict().items() if v is not None}
     updated_teacher = await update_teacher(teacher_id, teacher)
     if updated_teacher:

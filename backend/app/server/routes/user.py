@@ -42,10 +42,10 @@ async def add_user_data(request: Request, response: Response, user: UserSchema =
 @router.get("/all", response_description="Users retrieved")
 # @check_token
 async def get_users(request: Request, response: Response):
-    user = request.state.user
-    if (user['role'] != 'admin'):
-        response.status_code = 401
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # user = request.state.user
+    # if (user['role'] != 'admin'):
+    #     response.status_code = 401
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     users = await retrieve_users()
     if users:
         return ResponseModel(users, "Users data retrieved successfully")
@@ -55,9 +55,9 @@ async def get_users(request: Request, response: Response):
 # @check_token
 async def get_user(request: Request, response: Response, user_id: str):
     try:
-        if user_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-            response.status_code = status.HTTP_401_UNAUTHORIZED
-            return ErrorResponseModel("Unauthorized", 401, "Unauthorized")
+        # if user_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+        #     response.status_code = status.HTTP_401_UNAUTHORIZED
+        #     return ErrorResponseModel("Unauthorized", 401, "Unauthorized")
         new_user = await retrieve_user(user_id)
         if new_user:
             return ResponseModel(new_user, "User data retrieved successfully")
