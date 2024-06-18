@@ -1,5 +1,5 @@
 from server.database import (
-    research_collection,
+    research_collection,db
 )
 from bson import ObjectId
 

@@ -28,6 +28,7 @@ router = APIRouter()
 @check_token
 async def add_student_data(request: Request, response: Response,student: StudentSchema = Body(...)):
     student = jsonable_encoder(student)
+    print(student)
     new_student = await add_student(student)
     if "error" in new_student:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -35,23 +36,23 @@ async def add_student_data(request: Request, response: Response,student: Student
     return ResponseModel(new_student, "Student added successfully.")
 
 @router.get("/all", response_description="Students retrieved")
-@check_token
+# @check_token
 async def get_students(request: Request, response: Response):
-    user = request.state.user
-    if user['role'] != 'admin':
-        response.status_code = 401
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # user = request.state.user
+    # if user['role'] != 'admin':
+    #     response.status_code = 401
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     students = await retrieve_students()
     if students:
         return ResponseModel(students, "Students data retrieved successfully")
     return ResponseModel(students, "Empty list returned")
 
 @router.get("/{student_id}")
-@check_token
+# @check_token
 async def get_student(request: Request, response: Response, student_id: str):
-    if student_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # if student_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+    #     response.status_code = status.HTTP_401_UNAUTHORIZED
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     student = await retrieve_student(student_id)
     if student:
         return ResponseModel(student, "Student data retrieved successfully")

@@ -34,23 +34,23 @@ async def add_staff_data(request: Request, response: Response, staff: StaffUserS
     return ResponseModel(new_staff, "staff added successfully.")
 
 @router.get("/all", response_description="staffs retrieved")
-@check_token
+# @check_token
 async def get_staffs(request: Request, response: Response):
-    user = request.state.user
-    if user['role'] != 'admin':
-        response.status_code = 401
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # user = request.state.user
+    # if user['role'] != 'admin':
+    #     response.status_code = 401
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     staffs = await retrieve_staffs()
     if staffs:
         return ResponseModel(staffs, "staffs data retrieved successfully")
     return ResponseModel(staffs, "Empty list returned")
 
 @router.get("/{staff_id}")
-@check_token
+# @check_token
 async def get_staff(request: Request, response: Response, staff_id: str):
-    if staff_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # if staff_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+    #     response.status_code = status.HTTP_401_UNAUTHORIZED
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     staff = await retrieve_staff(staff_id)
     if staff:
         return ResponseModel(staff, "staff data retrieved successfully")
