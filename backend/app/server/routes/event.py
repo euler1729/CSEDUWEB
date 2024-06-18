@@ -88,10 +88,14 @@ async def create_event(request: Request, response: Response, event: EventsBaseMo
 @router.get("/{event_id}")
 @check_token
 async def get_event_id(request: Request, response: Response, event_id):
-    event = await get_event_by_id(id=event_id)
-    if event:
-        return ResponseModel(event, "Event viewed successfully")
-    return ResponseModel(event, "Couldn't find this event")
+    try:
+        event = await get_event_by_id(id=event_id)
+        if event:
+            return ResponseModel(event, "Event viewed successfully")
+        return ErrorResponseModel("Couldn't find this event", 404, "Event not found")
+    except Exception as e:
+        print("error: ", e)
+        return ErrorResponseModel("An error occurred", 400, e)
 
 # updating events by event id
 @router.put("/update/{event_id}")
