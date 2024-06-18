@@ -1,5 +1,5 @@
 from server.database import (
-    teachers_collection, db
+    teachers_collection, users_collection
 )
 from bson import ObjectId
 from server.controller.user import retrieve_user
@@ -31,18 +31,18 @@ def teacher_helper(teacher, user) -> dict:
 async def add_teacher(teacher_data: dict):
     try:
         # Check for duplicacy based on a unique field (e.g., email or user_id)
-        existing_teacher = db["teachers"].find_one({"user_id": teacher_data["user_id"]})
+        existing_teacher = teachers_collection.find_one({"user_id": teacher_data["user_id"]})
         if existing_teacher:
             return {"error": "Teacher with this user ID already exists."}
         
         # Check if the user exists
-        user = db["users"].find_one({"_id": ObjectId(teacher_data["user_id"])})
+        user = users_collection.find_one({"_id": ObjectId(teacher_data["user_id"])})
         if not user:
             return {"error": "User with this ID does not exist."}
 
         # Insert the new teacher
-        teacher = db["teachers"].insert_one(teacher_data)
-        new_teacher = db["teachers"].find_one({"_id": teacher.inserted_id})
+        teacher = teachers_collection.insert_one(teacher_data)
+        new_teacher = teachers_collection.find_one({"_id": teacher.inserted_id})
         return {"data": teacher_helper(new_teacher, user), "message": "Teacher added successfully."}
     except Exception as e:
         return {"error": str(e)}
