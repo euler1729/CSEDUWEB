@@ -1,9 +1,9 @@
-from server.database import db
+from server.database import (
+    students_collection,users_collection
+)
 from bson import ObjectId
 from server.controller.user import retrieve_user
 from server.models.student import StudentSchema, UpdateStudentSchema
-
-students_collection = db["students"]
 
 # helpers
 def student_helper(student, user) -> dict:
@@ -34,18 +34,18 @@ def student_helper(student, user) -> dict:
 async def add_student(student_data: dict):
     try:
         # Check for duplicacy based on a unique field (e.g., email or user_id)
-        existing_student = db["students"].find_one({"user_id": student_data["user_id"]})
+        existing_student = students_collection.find_one({"user_id": student_data["user_id"]})
         if existing_student:
             return {"error": "Student with this user ID already exists."}
         
         # Check if the user exists
-        user = db["users"].find_one({"_id": ObjectId(student_data["user_id"])})
+        user = users_collection.find_one({"_id": ObjectId(student_data["user_id"])})
         if not user:
             return {"error": "User with this ID does not exist."}
 
         # Insert the new student
-        student = db["students"].insert_one(student_data)
-        new_student = db["students"].find_one({"_id": student.inserted_id})
+        student = students_collection.insert_one(student_data)
+        new_student = students_collection.find_one({"_id": student.inserted_id})
         return {"data": student_helper(new_student, user), "message": "Student added successfully."}
     except Exception as e:
         return {"error": str(e)}

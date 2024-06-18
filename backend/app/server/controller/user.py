@@ -15,8 +15,6 @@ from bson import ObjectId
 from fastapi import Request, Response, status
 
 users_collection = db["users"]
-news_collection=db["news"]
-events_collection=db["events"]
 
 
 # helpers
@@ -31,12 +29,13 @@ def user_helper(user) -> dict:
         "city": user["city"],
         "state": user["state"],
         "role": user["role"],
+        "photo": user["photo"] if "photo" in user else None
     }
 
 # Add a new user into to the database
 async def add_user(user_data: dict):
     password = hash_password(user_data["password"])
-    print("Password is ", password)
+    # print("Password is ", password)
     user_data["password"] = password
     exist = users_collection.find_one({"email": user_data["email"]})
     if exist:
@@ -54,11 +53,25 @@ async def retrieve_users():
     return user_list
 
 # Retrieve a user with a matching ID
-async def retrieve_user(id: str):
-    user =  users_collection.find_one({"_id": ObjectId(id)})
-    if user:
-        return user_helper(user)
-    return None
+async def retrieve_user(key: str):
+    try:
+        user = users_collection.find_one({"_id": ObjectId(key)})
+        if user:
+            return user_helper(user)
+        return False
+    except Exception as e:
+        print(e)
+        return False
+# Retrieve a user with a matching Email
+async def retrieve_user_by_email(email: str):
+    try:
+        user = users_collection.find_one({"email": email})
+        if user:
+            return user_helper(user)
+        return False
+    except Exception as e:
+        print(e)
+        return False
 
 # Update a user with a matching ID
 async def update_user(id: str, data: dict):
@@ -71,5 +84,14 @@ async def update_user(id: str, data: dict):
             {"_id": ObjectId(id)}, {"$set": data}
         )
         if updated_user:
+            return True
+        return False
+
+# Delete a user from the database
+async def delete_user(id: str):
+    user =  users_collection.find_one({"_id": ObjectId(id)})
+    if user:
+        deleted_user =  users_collection.delete_one({"_id": ObjectId(id)})
+        if deleted_user:
             return True
         return False

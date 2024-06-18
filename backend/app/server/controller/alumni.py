@@ -1,9 +1,9 @@
-from server.database import db
+from server.database import (
+    alumni_collection
+)
 from bson import ObjectId
 from server.controller.student import retrieve_student
 from server.models.alumni import AlumniSchema
-
-alumni_collection = db["alumni"]
 
 # helpers
 def alumni_helper(alumni, student) -> dict:

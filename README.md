@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a web application built with FastAPI that provides a set of RESTful APIs for managing users, news, events, research, students, teachers, and alumni. It is designed to be easily deployable, manageable.
+This project is a web application built with FastAPI that provides a set of RESTful APIs for managing users, news, events, research, students, teachers, staff and alumni. It is designed to be easily deployable, manageable.
 
 ## Requirements
 
@@ -64,245 +64,64 @@ python3 app/main.py
 
 # API Summary
 
-### User APIs
+Certainly! Here's the markdown table with serial numbers added:
+| S.No | Endpoint                           | Method | Tags    | Summary                   | Request Body Schema          |
+|------|------------------------------------|--------|---------|---------------------------|------------------------------|
+| 1    | `/user/add`                        | POST   | User    | Add User Data             | `UserSchema`                 |
+| 2    | `/user/all`                        | GET    | User    | Get Users                 | N/A                          |
+| 3    | `/user/{user_id}`                  | GET    | User    | Get User                  | N/A                          |
+| 4    | `/user/update/{user_id}`           | PUT    | User    | Update User Data          | `UserSchema`                 |
+| 5    | `/user/delete/{user_id}`           | DELETE | User    | Delete User Data          | N/A                          |
+| 6    | `/auth/login`                      | POST   | Auth    | Login User                | `UserLogin`                  |
+| 7    | `/auth/reset-password-init`        | POST   | Auth    | Reset Password Init       | `ResetInit`                  |
+| 8    | `/auth/reset-password-confirm`     | POST   | Auth    | Reset Password Confirm    | `ResetPassword`              |
+| 9    | `/news/update/{news_id}`           | PUT    | News    | Update News               | `UpdateNewsBaseModel`        |
+| 10   | `/news/add`                        | POST   | News    | Create News               | `NewsBaseModel`              |
+| 11   | `/news/all`                        | GET    | News    | Get News                  | N/A                          |
+| 12   | `/news/{news_id}`                  | GET    | News    | Get News Id               | N/A                          |
+| 13   | `/event/all`                       | GET    | Event   | Get Event                 | N/A                          |
+| 14   | `/event/add`                       | POST   | Event   | Create Event              | `EventsBaseModel`            |
+| 15   | `/event/{event_id}`                | GET    | Event   | Get Event Id              | N/A                          |
+| 16   | `/event/update/{event_id}`         | PUT    | Event   | Update Event              | `UpdateEventsBaseModel`      |
+| 17   | `/event/register/private/{event_id}`| POST   | Event   | Register Event            | `UserFormModel`              |
+| 18   | `/event/register/update/{event_id}/{user_id}`| PUT    | Event   | Update Registration      | `UpdateUserFormModel`        |
+| 19   | `/event/register/list/{event_id}`  | GET    | Event   | Get Registration List     | N/A                          |
+| 20   | `/event/delete/{event_id}`         | DELETE | Event   | Delete Event              | N/A                          |
+| 21   | `/research/update/{research_id}`   | PUT    | Research| Update Research           | `UpdateResearchBaseModel`    |
+| 22   | `/research/add`                    | POST   | Research| Create Research           | `ResearchBaseModel`          |
+| 23   | `/research/all`                    | GET    | Research| Get All Research          | N/A                          |
+| 24   | `/research/{research_id}`          | GET    | Research| Get Research Id           | N/A                          |
+| 25   | `/research/delete/{research_id}`   | DELETE | Research| Delete One Research       | N/A                          |
+| 26   | `/research/delete-all`             | DELETE | Research| Delete All Research       | N/A                          |
+| 27   | `/alumni/add`                      | POST   | Alumni  | Add Alumni Data           | `AlumniSchema`               |
+| 28   | `/alumni/all`                      | GET    | Alumni  | Get Alumni                | N/A                          |
+| 29   | `/alumni/{alumni_id}`              | GET    | Alumni  | Get Alumni Id             | N/A                          |
+| 30   | `/alumni/update/{alumni_id}`       | PUT    | Alumni  | Update Alumni Data        | `UpdateAlumniSchema`         |
+| 31   | `/alumni/delete/{alumni_id}`       | DELETE | Alumni  | Delete One Alumni         | N/A                          |
+| 32   | `/alumni/delete-all`               | DELETE | Alumni  | Delete All Alumni         | N/A                          |
+| 33   | `/student/add`                     | POST   | Student | Add Student Data          | `StudentSchema`              |
+| 34   | `/student/all`                     | GET    | Student | Get Students              | N/A                          |
+| 35   | `/student/{student_id}`            | GET    | Student | Get Student               | N/A                          |
+| 36   | `/student/update/{student_id}`     | PUT    | Student | Update Student Data       | `UpdateStudentSchema`        |
+| 37   | `/student/delete/{student_id}`     | DELETE | Student | Delete One Student        | N/A                          |
+| 38   | `/student/delete-all`              | DELETE | Student | Delete All Students       | N/A                          |
+| 39   | `/teacher/add`                     | POST   | Teacher | Add Teacher Data          | `TeacherUserSchema`          |
+| 40   | `/teacher/all`                     | GET    | Teacher | Get Teachers              | N/A                          |
+| 41   | `/teacher/{teacher_id}`            | GET    | Teacher | Get Teacher               | N/A                          |
+| 42   | `/teacher/update/{teacher_id}`     | PUT    | Teacher | Update Teacher Data       | `UpdateTeacherUserSchema`    |
+| 43   | `/teacher/delete/{teacher_id}`     | DELETE | Teacher | Delete One Teacher        | N/A                          |
+| 44   | `/teacher/delete-all`              | DELETE | Teacher | Delete All Teachers       | N/A                          |
+| 45   | `/stats/all`                       | GET    | Stats   | Stats All                 | N/A                          |
+| 46   | `/message/add`                     | POST   | Message | Create Message            | `MessageBaseModel`           |
+| 47   | `/message/all`                     | GET    | Message | Get Messages              | N/A                          |
+| 48   | `/message/{id}`                    | GET    | Message | Get Message               | N/A                          |
+| 49   | `/staff/add`                       | POST   | Staff   | Add Staff Data            | `StaffUserSchema`            |
+| 50   | `/staff/all`                       | GET    | Staff   | Get Staffs                | N/A                          |
+| 51   | `/staff/{staff_id}`                | GET    | Staff   | Get Staff                 | N/A                          |
+| 52   | `/staff/update/{staff_id}`         | PUT    | Staff   | Update Staff Data         | `UpdateStaffUserSchema`      |
+| 53   | `/staff/delete/{staff_id}`         | DELETE | Staff   | Delete One Staff          | N/A                          |
+| 54   | `/staff/delete-all`                | DELETE | Staff   | Delete All Staffs         | N/A                          |
 
-- **Add User Data**
-  - **Endpoint:** `/user/add`
-  - **Method:** POST
-  - **Request Body:** UserSchema
-  - **Response:** User data added into the database
-
-- **Get Users**
-  - **Endpoint:** `/user/all`
-  - **Method:** GET
-  - **Response:** Users retrieved
-
-- **Get User**
-  - **Endpoint:** `/user/{user_id}`
-  - **Method:** GET
-  - **Parameters:** user_id (path)
-  - **Response:** User data retrieved successfully
-
-- **Update User Data**
-  - **Endpoint:** `/user/update/{user_id}`
-  - **Method:** PUT
-  - **Parameters:** user_id (path)
-  - **Request Body:** UserSchema
-  - **Response:** User data updated successfully
-
-### Auth APIs
-
-- **Login User**
-  - **Endpoint:** `/auth/login`
-  - **Method:** POST
-  - **Request Body:** UserLogin
-  - **Response:** Access token generated
-
-### News APIs
-
-- **Create News**
-  - **Endpoint:** `/news/add`
-  - **Method:** POST
-  - **Request Body:** NewsBaseModel
-  - **Response:** News has been added
-
-- **Get News**
-  - **Endpoint:** `/news/all`
-  - **Method:** GET
-  - **Response:** News viewed
-
-- **Get News by ID**
-  - **Endpoint:** `/news/{news_id}`
-  - **Method:** GET
-  - **Parameters:** news_id (path)
-  - **Response:** News data retrieved successfully
-
-- **Update News**
-  - **Endpoint:** `/news/update/{news_id}`
-  - **Method:** PUT
-  - **Parameters:** news_id (path)
-  - **Request Body:** UpdateNewsBaseModel
-  - **Response:** News updated successfully
-
-### Event APIs
-
-- **Create Event**
-  - **Endpoint:** `/event/add`
-  - **Method:** POST
-  - **Request Body:** EventsBaseModel
-  - **Response:** Event has been added
-
-- **Get Events**
-  - **Endpoint:** `/event/all`
-  - **Method:** GET
-  - **Response:** Events viewed
-
-- **Get Event by ID**
-  - **Endpoint:** `/event/{event_id}`
-  - **Method:** GET
-  - **Parameters:** event_id (path)
-  - **Response:** Event data retrieved successfully
-
-- **Update Event**
-  - **Endpoint:** `/event/update/{event_id}`
-  - **Method:** PUT
-  - **Parameters:** event_id (path)
-  - **Request Body:** UpdateEventsBaseModel
-  - **Response:** Event updated successfully
-
-- **Delete Event**
-  - **Endpoint:** `/event/delete/{event_id}`
-  - **Method:** DELETE
-  - **Parameters:** event_id (path)
-  - **Response:** Event deleted successfully
-
-### Research APIs
-
-- **Create Research**
-  - **Endpoint:** `/research/add`
-  - **Method:** POST
-  - **Request Body:** ResearchBaseModel
-  - **Response:** Research has been added
-
-- **Get All Research**
-  - **Endpoint:** `/research/all`
-  - **Method:** GET
-  - **Response:** Research viewed
-
-- **Get Research by ID**
-  - **Endpoint:** `/research/{research_id}`
-  - **Method:** GET
-  - **Parameters:** research_id (path)
-  - **Response:** Research data retrieved successfully
-
-- **Update Research**
-  - **Endpoint:** `/research/update/{research_id}`
-  - **Method:** PUT
-  - **Parameters:** research_id (path)
-  - **Request Body:** UpdateResearchBaseModel
-  - **Response:** Research updated successfully
-
-- **Delete One Research**
-  - **Endpoint:** `/research/delete/{research_id}`
-  - **Method:** DELETE
-  - **Parameters:** research_id (path)
-  - **Response:** Research deleted successfully
-
-- **Delete All Research**
-  - **Endpoint:** `/research/delete-all`
-  - **Method:** DELETE
-  - **Response:** All research publications deleted successfully
-
-### Alumni APIs
-
-- **Add Alumni Data**
-  - **Endpoint:** `/alumni/add`
-  - **Method:** POST
-  - **Request Body:** AlumniSchema
-  - **Response:** Alumni data added into the database
-
-- **Get Alumni**
-  - **Endpoint:** `/alumni/all`
-  - **Method:** GET
-  - **Response:** Alumni retrieved
-
-- **Get Alumni by ID**
-  - **Endpoint:** `/alumni/{alumni_id}`
-  - **Method:** GET
-  - **Parameters:** alumni_id (path)
-  - **Response:** Alumni data retrieved successfully
-
-- **Update Alumni Data**
-  - **Endpoint:** `/alumni/update/{alumni_id}`
-  - **Method:** PUT
-  - **Parameters:** alumni_id (path)
-  - **Request Body:** UpdateAlumniSchema
-  - **Response:** Alumni updated successfully
-
-- **Delete One Alumni**
-  - **Endpoint:** `/alumni/delete/{alumni_id}`
-  - **Method:** DELETE
-  - **Parameters:** alumni_id (path)
-  - **Response:** Alumni deleted successfully
-
-- **Delete All Alumni**
-  - **Endpoint:** `/alumni/delete-all`
-  - **Method:** DELETE
-  - **Response:** All alumni deleted successfully
-
-### Student APIs
-
-- **Add Student Data**
-  - **Endpoint:** `/student/add`
-  - **Method:** POST
-  - **Request Body:** StudentSchema
-  - **Response:** Student data added into the database
-
-- **Get Students**
-  - **Endpoint:** `/student/all`
-  - **Method:** GET
-  - **Response:** Students retrieved
-
-- **Get Student by ID**
-  - **Endpoint:** `/student/{student_id}`
-  - **Method:** GET
-  - **Parameters:** student_id (path)
-  - **Response:** Student data retrieved successfully
-
-- **Update Student Data**
-  - **Endpoint:** `/student/update/{student_id}`
-  - **Method:** PUT
-  - **Parameters:** student_id (path)
-  - **Request Body:** UpdateStudentSchema
-  - **Response:** Student data updated successfully
-
-- **Delete One Student**
-  - **Endpoint:** `/student/delete/{student_id}`
-  - **Method:** DELETE
-  - **Parameters:** student_id (path)
-  - **Response:** Student deleted successfully
-
-- **Delete All Students**
-  - **Endpoint:** `/student/delete-all`
-  - **Method:** DELETE
-  - **Response:** All students deleted successfully
-
-### Teacher APIs
-
-- **Add Teacher Data**
-  - **Endpoint:** `/teacher/add`
-  - **Method:** POST
-  - **Request Body:** TeacherUserSchema
-  - **Response:** Teacher data added into the database
-
-- **Get Teachers**
-  - **Endpoint:** `/teacher/all`
-  - **Method:** GET
-  - **Response:** Teachers retrieved
-
-- **Get Teacher by ID**
-  - **Endpoint:** `/teacher/{teacher_id}`
-  - **Method:** GET
-  - **Parameters:** teacher_id (path)
-  - **Response:** Teacher data retrieved successfully
-
-- **Update Teacher Data**
-  - **Endpoint:** `/teacher/update/{teacher_id}`
-  - **Method:** PUT
-  - **Parameters:** teacher_id (path)
-  - **Request Body:** UpdateTeacherUserSchema
-  - **Response:** Teacher data updated successfully
-
-- **Delete One Teacher**
-  - **Endpoint:** `/teacher/delete/{teacher_id}`
-  - **Method:** DELETE
-  - **Parameters:** teacher_id (path)
-  - **Response:** Teacher deleted successfully
-
-- **Delete All Teachers**
-  - **Endpoint:** `/teacher/delete-all`
-  - **Method:** DELETE
-  - **Response:** All teachers deleted successfully
 
 ## Contributing
 To contribute to this project, please fork the repository, create a new branch, and submit a pull request.

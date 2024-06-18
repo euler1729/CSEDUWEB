@@ -34,23 +34,23 @@ async def add_alumni_data(request: Request, response: Response,alumni: AlumniSch
     return ResponseModel(new_alumni, "Alumni added successfully.")
 
 @router.get("/all", response_description="Alumni retrieved")
-@check_token
+# @check_token
 async def get_alumni(request: Request, response: Response):
-    user = request.state.user
-    if user['role'] != 'admin':
-        response.status_code = 401
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # user = request.state.user
+    # if user['role'] != 'admin':
+    #     response.status_code = 401
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     alumni = await retrieve_alumni()
     if alumni:
         return ResponseModel(alumni, "Alumni data retrieved successfully")
     return ResponseModel(alumni, "Empty list returned")
 
 @router.get("/{alumni_id}")
-@check_token
+# @check_token
 async def get_alumni_id(request: Request, response: Response, alumni_id: str):
-    if alumni_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return ErrorResponseModel("Unauthorized", "Unauthorized")
+    # if alumni_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+    #     response.status_code = status.HTTP_401_UNAUTHORIZED
+    #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     alumni = await retrieve_alumni_by_id(alumni_id)
     if alumni:
         return ResponseModel(alumni, "Alumni data retrieved successfully")

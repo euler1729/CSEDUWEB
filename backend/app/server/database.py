@@ -1,10 +1,8 @@
 from pymongo import MongoClient
+import os
 
 print("Connecting to MongoDB...")
-uri = "mongodb+srv://IP_Lab:in3JffMHPrAdlzM3@cluster0.bnmqd0w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-# Here Change your username password Only Third Bracket part
-# uri = "mongodb+srv://[]:[]@cluster0.bnmqd0w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
+uri = os.getenv("MONGO_URI")
 
 client = MongoClient(uri)
 db = client["user_db"]
@@ -12,3 +10,9 @@ users_collection = db["users"]
 news_collection=db["news"]
 events_collection=db["events"]
 event_registration_form_collection = db["event_registration_form"]
+students_collection = db["students"]
+teachers_collection = db["teachers"]
+alumni_collection = db["alumni"]
+research_collection = db["research"]
+message_collection = db["message"]
+staff_collection = db["staff"]

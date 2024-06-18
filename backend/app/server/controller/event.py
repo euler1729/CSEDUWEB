@@ -1,18 +1,10 @@
-from server.database import (
-    db
-)
-from server.utils import (
-    hash_password
-)
-from server.controller.auth import (
-    verify_token
-)
 from bson import ObjectId
 from fastapi import Request, Response, status
 
-events_collection = db["events"]
-event_registration_form_collection = db["event_registration_form"]
-
+from server.database import (
+    events_collection,
+    event_registration_form_collection
+)
 
 # helper function for events
 def event_helper(event) -> dict:
@@ -81,10 +73,14 @@ async def update_event(id: str, updated_data: dict):
 
 # news by id
 async def get_event_by_id(id: str):
-    event = events_collection.find_one({"_id": ObjectId(id)})
-    if event:
-        return event_helper(event=event)
-    return None
+    try:
+        event = events_collection.find_one({"_id": ObjectId(id)})
+        if event:
+            return event_helper(event)
+        return None
+    except Exception as e:
+        print(e)
+        return None
 
 # event registration
 async def event_register(event_id: str, form: dict):
@@ -92,38 +88,71 @@ async def event_register(event_id: str, form: dict):
         query = {
             "$or": []
         }
-        if form['email'] and form['email'] != "null":
-            query['$or'].append({"event_id":event_id, "email": form['email']})
-        if form['user_id'] and form['user_id'] != "null":
-            query['$or'].append({"event_id":event_id, "user_id": form['user_id']})
+        # if form['email'] and form['email'] != "null":
+        #     query['$or'].append({"event_id":event_id, "email": form['email']})
+        # if form['user_id'] and form['user_id'] != "null":
+        #     query['$or'].append({"event_id":event_id, "user_id": form['user_id']})
 
         # print(query)
         
-        if len(query['$or']) == 0:
-            return False
+        # if len(query['$or']) == 0:
+        #     return False
         
-        event_registration = event_registration_form_collection.find_one(query)
+        # event_registration = event_registration_form_collection.find_one(query)
+        # if event_registration:
+        #     print("Already registered")
+        #     return False
 
-        if event_registration:
-            print("Already registered")
+        form["status"] = "pending"
+        recent_event_registration = event_registration_form_collection.insert_one(form)
+        return True
+        
+    except Exception as e:
+        print(e)
+        return False
+
+# updating event registration
+async def update_event_registration(form: dict):
+    try:
+        id = form["id"]
+
+        event_registration = event_registration_form_collection.find_one({"_id": ObjectId(id)})
+
+        if not event_registration:
             return False
-        try:
-            recent_event_registration = event_registration_form_collection.insert_one(form)
-            print(recent_event_registration)
+
+        updated_event_registration = event_registration_form_collection.update_one({"_id": ObjectId(id)}, 
+            {
+                "$set":{
+                    "name": form["name"] if form["name"] else event_registration["name"],
+                    "email": form["email"] if form["email"] else event_registration["email"],
+                    "phone": form["phone"] if form["phone"] else event_registration["phone"],
+                    "amount": form["amount"] if form["amount"] else event_registration["amount"],
+                    "trxId": form["trxId"] if form["trxId"] else event_registration["trxId"],
+                    "comment": form["comment"] if form["comment"] else event_registration["comment"],
+                    "status": form["status"] if form["status"] else event_registration["status"]
+                }
+            }
+        )
+        if updated_event_registration:
             return True
-        except Exception as e:
-            print(e)
-            return False
+        return False        
     except Exception as e:
         print(e)
         return False
 
 async def get_event_registration_list(event_id: str):
-    event_registration = event_registration_form_collection.find({"event_id": event_id})
-    list = []
-    for i in event_registration:
-        list.append(event_registration_helper(i))
-    return list
+    try:
+        event_registration = event_registration_form_collection.find({"event_id": event_id})
+        list = []
+        for i in event_registration:
+            print(i)
+            list.append(event_registration_helper(i))
+        print(list)
+        return list
+    except Exception as e:
+        print(e)
+        return None
 
 # deleting event by id
 async def event_delete(id: str):

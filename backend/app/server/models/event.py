@@ -83,16 +83,21 @@ class UserFormModel(BaseModel):
 
 # User form Update Data
 class UpdateUserFormModel(BaseModel):
+    id: Optional[str]
+    event_id: Optional[str]
+    user_id: Optional[str]
     name: Optional[str]
-    email: Optional[EmailStr]
+    email: Optional[str]
     phone: Optional[str]
     amount: Optional[int]
     trxId: Optional[str]
     comment: Optional[str]
+    status: Optional[str]
 
     class Config:
         json_schema_extra = {
             "example": {
+                "id": "60d0fe0b9d1d1f0c1c9c8c6c",
                 "event_id": "60d0fe0b9d1d1f0c1c9c8c6c",
                 "user_id": "60d0fe0b9d1d1f0c1c9c8c6c",
                 "name": "John Doe",

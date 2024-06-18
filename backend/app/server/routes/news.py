@@ -55,7 +55,7 @@ async def create_news(request: Request, response: Response, news: NewsBaseModel 
 
 # getting all news
 @router.get("/all", response_description="News viewed")
-@check_token
+# @check_token
 async def get_news_(request: Request, response: Response,):
     recent_news = await get_news()
     if recent_news:
@@ -64,7 +64,7 @@ async def get_news_(request: Request, response: Response,):
 
 # getting news by id
 @router.get("/{news_id}")
-@check_token
+# @check_token
 async def get_news_id(request: Request, response: Response, news_id):
     news = await get_news_by_id(id=news_id)
     if news:
