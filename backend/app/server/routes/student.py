@@ -35,7 +35,7 @@ async def add_student_data(request: Request, response: Response,student: Student
     return ResponseModel(new_student, "Student added successfully.")
 
 @router.get("/all", response_description="Students retrieved")
-@check_token
+# @check_token
 async def get_students(request: Request, response: Response):
     user = request.state.user
     if user['role'] != 'admin':
@@ -47,7 +47,7 @@ async def get_students(request: Request, response: Response):
     return ResponseModel(students, "Empty list returned")
 
 @router.get("/{student_id}")
-@check_token
+# @check_token
 async def get_student(request: Request, response: Response, student_id: str):
     if student_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
         response.status_code = status.HTTP_401_UNAUTHORIZED

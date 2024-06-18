@@ -51,7 +51,7 @@ async def create_research(request: Request, response: Response, research: Resear
 
 # Getting all research publications
 @router.get("/all", response_description="Research viewed")
-@check_token
+# @check_token
 async def get_all_research_(request: Request, response: Response):
     research_list = await get_all_research()
     if research_list:
@@ -60,7 +60,7 @@ async def get_all_research_(request: Request, response: Response):
 
 # Getting a research publication by id
 @router.get("/{research_id}")
-@check_token
+# @check_token
 async def get_research_id(request: Request, response: Response, research_id: str):
     research = await get_research_by_id(id=research_id)
     print(research_id, research)

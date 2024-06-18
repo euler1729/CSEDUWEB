@@ -55,7 +55,7 @@ def role_access(bit, role):
 
 # getting all events
 @router.get("/all", response_description="Events viewed")
-@check_token
+# @check_token
 async def get_event_(request: Request, response: Response,):
     events = await get_events()
     if events:
@@ -86,7 +86,7 @@ async def create_event(request: Request, response: Response, event: EventsBaseMo
 
 # getting event by id
 @router.get("/{event_id}")
-@check_token
+# @check_token
 async def get_event_id(request: Request, response: Response, event_id):
     event = await get_event_by_id(id=event_id)
     if event:

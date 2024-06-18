@@ -34,7 +34,7 @@ async def add_teacher_data(request: Request, response: Response, teacher: Teache
     return ResponseModel(new_teacher, "Teacher added successfully.")
 
 @router.get("/all", response_description="Teachers retrieved")
-@check_token
+# @check_token
 async def get_teachers(request: Request, response: Response):
     user = request.state.user
     if user['role'] != 'admin':
@@ -46,7 +46,7 @@ async def get_teachers(request: Request, response: Response):
     return ResponseModel(teachers, "Empty list returned")
 
 @router.get("/{teacher_id}")
-@check_token
+# @check_token
 async def get_teacher(request: Request, response: Response, teacher_id: str):
     if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
         response.status_code = status.HTTP_401_UNAUTHORIZED

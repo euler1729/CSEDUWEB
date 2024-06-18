@@ -40,7 +40,7 @@ async def add_user_data(request: Request, response: Response, user: UserSchema =
         return ErrorResponseModel("An error occurred", 400, str(e))
 
 @router.get("/all", response_description="Users retrieved")
-@check_token
+# @check_token
 async def get_users(request: Request, response: Response):
     user = request.state.user
     if (user['role'] != 'admin'):
@@ -52,7 +52,7 @@ async def get_users(request: Request, response: Response):
     return ResponseModel(users, "Empty list returned")
 
 @router.get("/{user_id}")
-@check_token
+# @check_token
 async def get_user(request: Request, response: Response, user_id: str):
     try:
         if user_id != request.state.user['_id'] and request.state.user['role'] != 'admin':

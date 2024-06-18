@@ -33,7 +33,7 @@ async def create_message(request: Request, response: Response, message: MessageB
 
 # get all messages
 @router.get("/all", response_description="Messages retrieved")
-@check_token
+# @check_token
 async def get_messages(request: Request, response: Response):
     try:
         messages = await get_message_all()
@@ -46,7 +46,7 @@ async def get_messages(request: Request, response: Response):
 
 # get message by id
 @router.get("/{id}", response_description="Message retrieved")
-@check_token
+# @check_token
 async def get_message(request: Request, response: Response, id):
     try:
         message = await get_message_by_id(id)
