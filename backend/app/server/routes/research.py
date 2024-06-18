@@ -43,7 +43,7 @@ async def update_research_(request: Request, response: Response, research_id: st
 
 # Creating a research publication
 @router.post("/add", response_description="Research has been added")
-@check_token
+# @check_token
 async def create_research(request: Request, response: Response, research: ResearchBaseModel = Body(...)):
     recent_research = jsonable_encoder(research)
     recent = await add_research(recent_research)
