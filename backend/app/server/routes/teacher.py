@@ -1,3 +1,5 @@
+from server.controller.user import retrieve_user
+from server.controller.research import get_all_research
 from fastapi import APIRouter, Body, Request, Response, status
 from fastapi.encoders import jsonable_encoder
 from server.database import db
@@ -45,6 +47,25 @@ async def get_teachers(request: Request, response: Response):
         return ResponseModel(teachers, "Teachers data retrieved successfully")
     return ResponseModel(teachers, "Empty list returned")
 
+# @router.get("/{teacher_id}")
+# # @check_token
+# async def get_teacher(request: Request, response: Response, teacher_id: str):
+#     # if teacher_id != request.state.user['_id'] and request.state.user['role'] != 'admin':
+#     #     response.status_code = status.HTTP_401_UNAUTHORIZED
+#     #     return ErrorResponseModel("Unauthorized", "Unauthorized")
+#     teacher = await retrieve_teacher(teacher_id)
+#     if teacher:
+#         research_list = await get_all_research()
+#         for research in research_list:
+#             if research['author'].contains(teacher['user_id']):
+#                 teacher['research'].append(research)
+#         return ResponseModel(teacher, "Teacher data retrieved successfully")
+#     return ResponseModel(teacher, "Teacher not found")
+def is_similar(name1: str, name2: str, threshold: float = 0.8) -> bool:
+    matches = sum(1 for a, b in zip(name1, name2) if a == b)
+    longest_length = max(len(name1), len(name2))
+    return matches / longest_length >= threshold
+
 @router.get("/{teacher_id}")
 # @check_token
 async def get_teacher(request: Request, response: Response, teacher_id: str):
@@ -52,9 +73,25 @@ async def get_teacher(request: Request, response: Response, teacher_id: str):
     #     response.status_code = status.HTTP_401_UNAUTHORIZED
     #     return ErrorResponseModel("Unauthorized", "Unauthorized")
     teacher = await retrieve_teacher(teacher_id)
+    # print(teacher)
+    
     if teacher:
+        research_list = await get_all_research()
+        user = await retrieve_user(teacher['user']['id'])
+        teacher['email'] = user['email']
+        username = user['first_name'] + ' ' + user['last_name']
+        
+        teacher['research'] = []
+        for research in research_list:
+            for author in research['authors']:
+                if is_similar(author, username):
+                    teacher['research'].append(research)
+                    break
+        
         return ResponseModel(teacher, "Teacher data retrieved successfully")
-    return ResponseModel(teacher, "Teacher not found")
+    
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return ResponseModel({}, "Teacher not found")
 
 @router.put("/update/{teacher_id}")
 @check_token
