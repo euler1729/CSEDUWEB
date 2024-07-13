@@ -1,4 +1,4 @@
-#!/home/mahmud/Labs/IPLAB/backend/.venv/bin/python3
+#!/Users/mahmud/Dev/CSEDUWEB/backend/.venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
