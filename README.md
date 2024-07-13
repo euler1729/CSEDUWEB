@@ -22,7 +22,7 @@ This project is a web application built with FastAPI that provides a set of REST
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activat
+source .venv/bin/activate
 ```
 3. Install the dependencies:
 
