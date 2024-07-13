@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const axiosPrivate = axios.create({
-    baseURL:'http://localhost:8000'
+    baseURL:'http://be.cseduaa.org/'
 })
 const useAxiosPrivate = () => {
     const navigate = useNavigate();

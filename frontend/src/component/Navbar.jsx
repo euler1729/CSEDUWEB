@@ -49,7 +49,7 @@ const Navbar = () => {
         className="w-20 h-20"
         alt="Logo"
       />
-      <h1 className="w-full text-3xl font-bold text-[#000]">CSEDU</h1>
+      {/* <h1 className="w-full text-3xl font-bold text-[#000]">CSEDU</h1> */}
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center">
